@@ -1,11 +1,12 @@
 ﻿#include "main.h"
+#include "scene_menu.h"
 
 int GameLooper::Init() {
-	fnt = xx::engine.LoadBMFont("res/font/coderscrux.fnt"sv);
+	fnt = xx::engine.LoadBMFont("res/coderscrux.fnt"sv);
 	fpsViewer.Init(fnt);
 
-	//scene = xx::Make<MainMenu::Scene>();
-	//scene->Init(this);
+	scene = xx::Make<SceneMenu>();
+	scene->Init(this);
 
 	return 0;
 }
@@ -13,7 +14,8 @@ int GameLooper::Init() {
 int GameLooper::Update() {
 	if (xx::engine.Pressed(xx::KbdKeys::Escape)) return 1;
 
-	//int r = scene->Update();
+	if (!scene) return 1;
+	if (int r = scene->Update()) return r;
 
 	fpsViewer.Update();
 	return 0;
