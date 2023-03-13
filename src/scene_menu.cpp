@@ -1,18 +1,19 @@
 ﻿#include "main.h"
 #include "scene_menu.h"
+#include "scene_game.h"
 
-void SceneMenu::Init(GameLooper* looper) {
+void Scene_Menu::Init(GameLooper* looper) {
 	this->looper = looper;
 	menu.Init();
-	menu.items.emplace_back().Init(this, {-100, 100}, "play", 32, [this]() {
-		this->looper->DelaySwitchTo<SceneMenu>();
+	menu.items.emplace_back().Init(this, {0, 150}, "play", 128, [this]() {
+		this->looper->DelaySwitchTo<Scene_Game>();
 	});
-	menu.items.emplace_back().Init(this, {-100, -100}, "exit", 32, [this]() {
+	menu.items.emplace_back().Init(this, {0, -150}, "exit", 128, [this]() {
 		this->looper->scene.Reset();
 	});
 }
 
-int SceneMenu::Update() {
+int Scene_Menu::Update() {
 	menu.Update();
 
 	menu.Draw();

@@ -14,7 +14,6 @@ struct SceneBase {
 struct GameLooper : xx::GameLooperBase {
 	xx::BMFont fnt;
 	xx::FpsViewer fpsViewer;
-	double timePool{};
 
 	xx::Shared<SceneBase> scene;
 	template<typename LT>
