@@ -21,6 +21,8 @@ xx::Coro Stage1::CoEnter() {
 		scene->coros.Add(CoCreateMonsterTeam(1, 2000));					// make some monster1 team
 		CoSleep(0.5s);
 	}
+
+	CoSleep(10s);														// wait some time
 	
 	scene->coros.Add(CoCreateMonsters(120 * 5, 10));					// make some random monster2
 	
@@ -37,7 +39,7 @@ xx::Coro Stage1::CoCreateMonsters(int n1, int n2) {
 		for (int j = 0; j < n2; j++) {
 
 			auto radians = scene->rnd.Next<float>(0, M_PI);
-			xx::XY v{ std::cos(radians),std::sin(radians) };
+			xx::XY v{ std::cos(radians), std::sin(radians) };
 			auto bornPos = v * (xx::engine.hw + 200);
 			auto d = scene->lastPlanePos - bornPos;
 			radians = std::atan2(d.y, d.x);
@@ -68,7 +70,7 @@ xx::Coro Stage1::CoCreateMonsterTeam(int n, int64_t bonus) {
 	for (int i = 0; i < n; i++) {
 		auto m = xx::Make<Sobj_Monster1>();
 		m->Init1(scene, 4.f, { 255,255,255,255 }, dt);
-		m->Init2({ -1000, 300 }, scene->movePaths.monsterTeam);
+		m->Init2({}, scene->movePaths.monsterStyleM);
 		scene->AddMonster(m);
 		CoSleep(600ms);
 	}
