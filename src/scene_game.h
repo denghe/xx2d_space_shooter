@@ -36,8 +36,8 @@ struct Scene_Game : SceneBase {
 
 	std::vector<xx::Shared<Item_Bullet>> bullets;
 
+	xx::SpaceGridC<Item_Monster> monsterGrid;			// ensure life cycle > monsters
 	std::vector<xx::Shared<Item_Monster>> monsters;
-	xx::SpaceGridC<Item_Monster> monsterGrid;
 	std::vector<Item_Monster*> tmpMonsters;
 
 	std::vector<xx::Shared<Item_LabelEffect>> labels;
@@ -49,6 +49,7 @@ struct Scene_Game : SceneBase {
 	// ...
 
 	xx::Audio audio;
+
 	xx::Coros coros;
 
 	float timePool{};
