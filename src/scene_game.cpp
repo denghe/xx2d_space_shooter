@@ -1,5 +1,7 @@
 ﻿#include "main.h"
 #include "scene_game.h"
+#include "stage.h"
+// ...
 
 void Scene_Game::Init(GameLooper* looper) {
 	this->looper = looper;
@@ -15,15 +17,16 @@ void Scene_Game::Init(GameLooper* looper) {
 	// init all
 	space.Init(this);
 	score.Init(this);
-	plane.Emplace()->Init(this);
 	// ...
 
 	// play bg music
 	audio.PlayBG("res/bg.ogg");
 
-	// run script
-	coros.Add(SceneLogic());
+	// run stage
+	stages.Init(this);
 
+	// init plane
+	coros.Add(CoPlaneReborn({}, 0s));
 }
 
 /***********************************************************************/
@@ -45,7 +48,7 @@ int Scene_Game::Update() {
 
 		// move player's plane
 		if (plane && plane->Update()) {
-			coros.Add(SceneLogic_PlaneReborn(plane->pos, plane->pos));	// reborn
+			coros.Add(CoPlaneReborn(plane->pos));	// reborn
 			plane.Reset();
 		}
 
@@ -111,84 +114,9 @@ int Scene_Game::Update() {
 	for (auto& o : powers) o->Draw();
 	for (auto& o : labels) o->Draw();
 	score.Draw();
+	if (stageTitle) stageTitle->Draw();
 	// ...
 
 
 	return 0;
-}
-
-/***********************************************************************/
-
-void Scene_Game::AddMonster(Sobj_Monster* m) {
-	m->indexAtOwnerMonsters = monsters.size();
-	monsters.emplace_back(m);
-}
-
-void Scene_Game::EraseMonster(Sobj_Monster* m) {
-	assert(m);
-	assert(m->owner);
-	assert(m->owner == this);
-	m->SGCTryRemove();
-	auto idx = m->indexAtOwnerMonsters;
-	m->indexAtOwnerMonsters = std::numeric_limits<size_t>::max();
-	m->owner = {};
-	assert(monsters[idx] == m);
-	monsters[idx] = monsters.back();
-	monsters.back()->indexAtOwnerMonsters = idx;
-	monsters.pop_back();
-}
-
-/***********************************************************************/
-
-xx::Coro Scene_Game::SceneLogic() {
-	while (true) {
-		for (size_t i = 0; i < 30; i++) {
-			coros.Add(SceneLogic_CreateMonsterTeam(1, 2000));
-			CoSleep(0.5s);
-		}
-		{
-			int n1 = 120 * 5, n2 = 50;
-			for (int i = 0; i < n1; i++) {
-				for (int j = 0; j < n2; j++) {
-					auto radians = rnd.Next<float>(0, M_PI);
-					xx::XY v{ std::cos(radians),std::sin(radians) };
-					auto bornPos = v * (xx::engine.hw + 200);
-					auto d = lastPlanePos - bornPos;
-					radians = std::atan2(d.y, d.x);
-					auto m = xx::Make<Sobj_Monster2>();
-					m->Init1(this, 2.f, { 255,255,255,255 });
-					m->Init2(bornPos, radians);
-					AddMonster(m);
-				}
-				CoYield;	//CoSleep(50ms);
-			}
-		}
-		// ...
-	}
-}
-
-xx::Coro Scene_Game::SceneLogic_CreateMonsterTeam(int n, int64_t bonus) {
-	auto dt = xx::Make<Listener<Sobj_Monster>>([this, n, bonus](Sobj_Monster* m) mutable {
-		if (--n == 0) {
-			score.Add(bonus);
-			labels.emplace_back().Emplace()->Init(this, m->pos, xx::ToString("+", bonus));	// show label effect
-			powers.emplace_back().Emplace()->Init(this, m->pos, stuffIndex++);	// drop P
-			if (stuffIndex == 4) {
-				stuffIndex = 0;
-			}
-		}
-		});
-	for (int i = 0; i < n; i++) {
-		auto m = xx::Make<Sobj_Monster1>();
-		m->Init1(this, 4.f, { 255,255,255,255 }, dt);
-		m->Init2({ -1000, 300 }, movePaths.monsterTeam);
-		AddMonster(m);
-		CoSleep(600ms);
-	}
-}
-
-xx::Coro Scene_Game::SceneLogic_PlaneReborn(xx::XY deathPos, xx::XY bornPos) {
-	CoSleep(3s);
-	assert(!plane);
-	plane.Emplace()->Init(this, bornPos, 240);
 }

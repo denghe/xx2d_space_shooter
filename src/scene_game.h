@@ -13,17 +13,12 @@
 #include "sobj_score.h"
 #include "sobj_space.h"
 // ...
+#include "stage.h"
+// ...
 
 struct Scene_Game : SceneBase {
 	void Init(GameLooper* looper) override;
 	int Update() override;
-
-	xx::Coro SceneLogic();
-	xx::Coro SceneLogic_CreateMonsterTeam(int n, int64_t bonus);
-	xx::Coro SceneLogic_PlaneReborn(xx::XY deathPos = {}, xx::XY bornPos = {});
-
-	void AddMonster(Sobj_Monster* m);	// insert into monsters & sync index
-	void EraseMonster(Sobj_Monster* m);	// remove from monsters & clear index
 
 
 	Manager_Frames frames;
@@ -46,11 +41,14 @@ struct Scene_Game : SceneBase {
 
 	std::vector<xx::Shared<Sobj_DeathEffect>> deathEffects;
 
+	xx::Shared<xx::Label> stageTitle;	// manage by stage
 	// ...
 
 	xx::Audio audio;
 
 	xx::Coros coros;
+
+	Stages stages;
 
 	float timePool{};
 	float bgScale{}, scale{};
@@ -58,4 +56,11 @@ struct Scene_Game : SceneBase {
 	xx::XY lastPlanePos{};
 	xx::Rnd rnd;
 	int stuffIndex{};
+
+
+
+	// utils
+	xx::Coro CoPlaneReborn(xx::XY bornPos = {}, std::chrono::steady_clock::duration const& delay = 3s);
+	void AddMonster(Sobj_Monster* m);	// insert into monsters & sync index
+	void EraseMonster(Sobj_Monster* m);	// remove from monsters & clear index
 };
