@@ -2,7 +2,7 @@
 #include "stage.h"
 // ...
 
-struct Stage1 : Stage {
+struct Stage5 : Stage {
 	void Init(Scene_Game* scene_) override;
 	void Enter() override;
 	void Leave() override;

@@ -1,20 +1,23 @@
 ﻿#include "main.h"
 #include "scene_game.h"
 #include "sobj_plane.h"
+#include "sobj_plane_gun1.h"
+#include "sobj_plane_gun2.h"
+// ...
 
-void Sobj_Plane::Init(Scene_Game* owner, xx::XY const& bornPos, int64_t const& invincibleTime) {
-	this->owner = owner;
+void Sobj_Plane::Init(Scene_Game* scene, xx::XY const& bornPos, int64_t const& invincibleTime) {
+	this->scene = scene;
 	pos = bornPos;
 	inc = {};
-	level = 1;
-	speed = 0.5f * owner->scale;
+	speed = 0.5f * scene->scale;
 	frame = 2;	// 1 ~ 3
-	radius = 7 * owner->scale;
-	invincibleFrameNumber = owner->frameNumber + invincibleTime;
-	fireCD = 20;
-	bulletDamage = 10;
+	radius = 7 * scene->scale;
+	invincibleFrameNumber = scene->frameNumber + invincibleTime;
 
-	body.SetFrame(owner->frames.plane[1]).SetScale(owner->scale);
+	gun = xx::Make<Sobj_PlaneGun1>();
+	gun->Init(this);
+
+	body.SetFrame(scene->frames.plane[1]).SetScale(scene->scale);
 }
 
 bool Sobj_Plane::Update() {
@@ -32,51 +35,65 @@ bool Sobj_Plane::Update() {
 		inc = d.As<float>() / std::sqrt(float(dd)) * speed;
 		pos += inc;
 	}
-	owner->lastPlanePos = pos;
+	scene->lastPlanePos = pos;
 	//}
 
-	if (invincibleFrameNumber <= owner->frameNumber) {
+	if (invincibleFrameNumber <= scene->frameNumber) {
 		// collision detection with monster
-		for (auto& m : owner->monsters) {
+		for (auto& m : scene->monsters) {
 			auto d = m->pos - pos;
 			auto rr = (m->radius + radius) * (m->radius + radius);
 			auto dd = d.x * d.x + d.y * d.y;
 			if (dd < rr) {
-				owner->deathEffects.emplace_back().Emplace()->Init(owner, pos);	// show death effect
+				scene->deathEffects.emplace_back().Emplace()->Init(scene, pos);	// show death effect
 				return true;
 			}
 		}
 	}
 
 	// collision detection with P
-	for (auto i = (ptrdiff_t)owner->powers.size() - 1; i >= 0; --i) {
-		auto& o = owner->powers[i];
+	for (auto i = (ptrdiff_t)scene->powers.size() - 1; i >= 0; --i) {
+		auto& o = scene->powers[i];
 		auto d = o->pos - pos;
 		auto rr = (o->radius + radius) * (o->radius + radius);
 		auto dd = d.x * d.x + d.y * d.y;
 		if (dd < rr) {
+
 			switch (o->typeId) {
 			case 0:
-				level += 5;
-				owner->labels.emplace_back().Emplace()->Init(owner, pos, xx::ToString("level up!"));	// show label effect
+				gun->LevelUp();
 				break;
 			case 1:
-				fireCD /= 2;
-				owner->labels.emplace_back().Emplace()->Init(owner, pos, xx::ToString("reduce fire CD!"));	// show label effect
+				gun->SpeedUp();
 				break;
 			case 2:
-				bulletDamage += 10;
-				owner->labels.emplace_back().Emplace()->Init(owner, pos, xx::ToString("bullet damage up!"));	// show label effect
+				gun->PowerUp();
 				break;
 			case 3:
 				speed *= 2;
-				owner->labels.emplace_back().Emplace()->Init(owner, pos, xx::ToString("speed up!"));	// show label effect
+				scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("move speed up!"));	// show label effect
 				break;
+			case 4:
+			{
+				auto newGun = xx::Make<Sobj_PlaneGun2>();
+				newGun->InitFrom(gun.pointer);
+				gun = std::move(newGun);
+				scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("change to gun 2!"));	// show label effect
+				break;
+			}
+			case 5:
+			{
+				auto newGun = xx::Make<Sobj_PlaneGun1>();
+				newGun->InitFrom(gun.pointer);
+				gun = std::move(newGun);
+				scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("change to gun 1!"));	// show label effect
+				break;
+			}
 			default:
 				throw std::logic_error("unhandled typeId");
 			}
-			o = owner->powers.back();
-			owner->powers.pop_back();
+			o = scene->powers.back();
+			scene->powers.pop_back();
 		}
 	}
 
@@ -108,22 +125,14 @@ bool Sobj_Plane::Update() {
 	}
 
 	// auto shoot
-	if (fireableFrameNumber < owner->frameNumber) {
-		fireableFrameNumber = owner->frameNumber + fireCD;
-		auto step = 2 * owner->scale;
-		float x = -level / 2 * step;
-		for (int i = 0; i < level; i++) {
-			auto&& b = owner->bullets.emplace_back().Emplace();
-			b->Init(owner, pos + xx::XY{ x + i * step, 8 * owner->scale }, bulletDamage);
-		}
-	}
+	gun->Update();
 
 	return false;
 }
 
 void Sobj_Plane::Draw() {
-	body.SetFrame(owner->frames.plane[size_t(frame + 0.5f)])
+	body.SetFrame(scene->frames.plane[size_t(frame + 0.5f)])
 		.SetPosition(pos)
-		.SetColor(invincibleFrameNumber > owner->frameNumber ? xx::RGBA8{ 127,127,127,220 } : xx::RGBA8{ 255,255,255,255 })
+		.SetColor(invincibleFrameNumber > scene->frameNumber ? xx::RGBA8{ 127,127,127,220 } : xx::RGBA8{ 255,255,255,255 })
 		.Draw();
 }

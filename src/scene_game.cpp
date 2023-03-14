@@ -120,3 +120,49 @@ int Scene_Game::Update() {
 
 	return 0;
 }
+
+/***********************************************************************/
+
+
+void Scene_Game::AddMonster(Sobj_Monster* m) {
+	m->indexAtOwnerMonsters = monsters.size();
+	monsters.emplace_back(m);
+}
+
+void Scene_Game::EraseMonster(Sobj_Monster* m) {
+	assert(m);
+	assert(m->scene);
+	assert(m->scene == this);
+	m->SGCTryRemove();
+	auto idx = m->indexAtOwnerMonsters;
+	m->indexAtOwnerMonsters = std::numeric_limits<size_t>::max();
+	m->scene = {};
+	assert(monsters[idx] == m);
+	monsters[idx] = monsters.back();
+	monsters.back()->indexAtOwnerMonsters = idx;
+	monsters.pop_back();
+}
+
+/***********************************************************************/
+
+xx::Coro Scene_Game::CoPlaneReborn(xx::XY bornPos, std::chrono::steady_clock::duration const& delay) {
+	CoSleep(delay);
+	assert(!plane);
+	plane.Emplace()->Init(this, bornPos, 240);
+}
+
+xx::Coro Scene_Game::CoShowStageTitle(std::string_view const& txt) {
+	auto&& lb = stageTitle.Emplace();									// create title
+
+	lb->SetColor({ 255, 127, 127, 255 }).SetPosition({ 0, 200 })
+		.SetText(looper->fnt, txt, 128);								// set properties
+
+	CoSleep(1s);														// show & wait 1s
+
+	for (int i = 255; i >= 0; i -= 2) {
+		lb->SetColor({ 255, 127, 127, (uint8_t)i });					// fade out
+		CoYield;
+	}
+
+	lb.Reset();															// release
+}

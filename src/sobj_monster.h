@@ -8,7 +8,7 @@ using Listener_s = xx::Shared<Listener<T>>;
 
 struct Scene_Game;
 struct Sobj_Monster : xx::SpaceGridCItem<Sobj_Monster> {
-	Scene_Game* owner{};
+	Scene_Game* scene{};
 	size_t indexAtOwnerMonsters{ std::numeric_limits<size_t>::max() };
 
 	xx::XY pos{};
@@ -20,7 +20,7 @@ struct Sobj_Monster : xx::SpaceGridCItem<Sobj_Monster> {
 	xx::Quad body;
 	xx::RGBA8 color;
 
-	void Init1(Scene_Game* owner_, float const& speed_ = 1.f, xx::RGBA8 const& color_ = { 255,255,255,255 }, Listener_s<Sobj_Monster> deathListener_ = {});
+	void Init1(Scene_Game* scene_, float const& speed_ = 1.f, xx::RGBA8 const& color_ = { 255,255,255,255 }, Listener_s<Sobj_Monster> deathListener_ = {});
 	virtual bool Update() = 0;
 	void UpdateFrameIndex();
 	bool Hit(int64_t const& damage);	// return true: dead

@@ -2,19 +2,19 @@
 #include "scene_game.h"
 #include "sobj_power.h"
 
-void Sobj_Power::Init(Scene_Game* const& owner_, xx::XY const& pos_, int const& typeId_) {
-	owner = owner_;
+void Sobj_Power::Init(Scene_Game* const& scene_, xx::XY const& pos_, int const& typeId_) {
+	scene = scene_;
 	pos = pos_;
 	typeId = typeId_;
 
 	speed = 4.f;
-	radius = 5 * owner->scale;
-	mpc = owner->movePaths.stuff;
+	radius = 5 * scene->scale;
+	mpc = scene->movePaths.stuff;
 
 	auto& tar = mpc->points[0].pos;
 	inc = (tar - pos).Normalize() * speed;
 
-	body.SetFrame(owner->frames.stuff[typeId]).SetScale(owner->scale);
+	body.SetFrame(scene->frames.stuff[typeId]).SetScale(scene->scale);
 }
 
 int Sobj_Power::Update() {

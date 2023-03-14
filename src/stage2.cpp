@@ -1,21 +1,21 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "stage1.h"
+#include "stage2.h"
 
-void Stage1::Init(Scene_Game* scene_) {
+void Stage2::Init(Scene_Game* scene_) {
 	scene = scene_;
 }
 
-void Stage1::Enter() {
+void Stage2::Enter() {
 	scene->coros.Add(CoEnter());
 }
 
-void Stage1::Leave() {
+void Stage2::Leave() {
 }
 
-xx::Coro Stage1::CoEnter() {
+xx::Coro Stage2::CoEnter() {
 	
-	scene->coros.Add(scene->CoShowStageTitle("stage 1"));				// show stage title
+	scene->coros.Add(scene->CoShowStageTitle("stage 2"));				// show stage title
 
 	for (size_t i = 0; i < 10; i++) {
 		scene->coros.Add(CoCreateMonsterTeam(1, 2000));					// make some monster1 team
@@ -29,7 +29,7 @@ xx::Coro Stage1::CoEnter() {
 	scene->stages.GoNext();												// next stage
 }
 
-xx::Coro Stage1::CoCreateMonsters(int n1, int n2) {
+xx::Coro Stage2::CoCreateMonsters(int n1, int n2) {
 	// i: num frames
 	for (int i = 0; i < n1; i++) {
 
@@ -52,7 +52,7 @@ xx::Coro Stage1::CoCreateMonsters(int n1, int n2) {
 	}
 }
 
-xx::Coro Stage1::CoCreateMonsterTeam(int n, int64_t bonus) {
+xx::Coro Stage2::CoCreateMonsterTeam(int n, int64_t bonus) {
 	// team death counter
 	auto dt = xx::Make<Listener<Sobj_Monster>>([this, n, bonus](Sobj_Monster* m) mutable {
 		if (--n == 0) {

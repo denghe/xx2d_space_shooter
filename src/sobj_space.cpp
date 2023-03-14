@@ -2,11 +2,11 @@
 #include "scene_game.h"
 #include "sobj_space.h"
 
-void Sobj_Space::Init(Scene_Game* owner) {
-	this->owner = owner;
-	body.SetFrame(owner->frames.background[0]).SetScale(owner->bgScale);
-	yInc = 0.1f * owner->bgScale;
-	ySize = body.texRectH * owner->bgScale;
+void Sobj_Space::Init(Scene_Game* scene) {
+	this->scene = scene;
+	body.SetFrame(scene->frames.background[0]).SetScale(scene->bgScale);
+	yInc = 0.1f * scene->bgScale;
+	ySize = body.texRectH * scene->bgScale;
 }
 
 void Sobj_Space::Update() {

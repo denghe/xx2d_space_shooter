@@ -55,12 +55,14 @@ struct Scene_Game : SceneBase {
 	int64_t frameNumber{};
 	xx::XY lastPlanePos{};
 	xx::Rnd rnd;
-	int stuffIndex{};
+	int stuffTypeId{};
 
 
 
 	// utils
+	xx::Coro CoShowStageTitle(std::string_view const& txt);
 	xx::Coro CoPlaneReborn(xx::XY bornPos = {}, std::chrono::steady_clock::duration const& delay = 3s);
+
 	void AddMonster(Sobj_Monster* m);	// insert into monsters & sync index
 	void EraseMonster(Sobj_Monster* m);	// remove from monsters & clear index
 };
