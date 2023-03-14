@@ -1,8 +1,8 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "item_monster2.h"
+#include "sobj_monster2.h"
 
-void Item_Monster2::Init2(xx::XY const& pos_, float const& radians_) {
+void Sobj_Monster2::Init2(xx::XY const& pos_, float const& radians_) {
 	assert(owner);
 	// store args
 	pos = pos_;
@@ -22,7 +22,7 @@ void Item_Monster2::Init2(xx::XY const& pos_, float const& radians_) {
 	body.SetScale(owner->scale / 3);
 }
 
-bool Item_Monster2::Update() {
+bool Sobj_Monster2::Update() {
 	pos += inc;
 	SGCUpdate(pos.As<int32_t>() + owner->monsterGrid.maxX / 2);
 	UpdateFrameIndex();

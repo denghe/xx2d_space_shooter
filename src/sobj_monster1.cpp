@@ -1,8 +1,8 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "item_monster1.h"
+#include "sobj_monster1.h"
 
-void Item_Monster1::Init2(xx::XY const& pos_, xx::Shared<xx::MovePathCache> mpc_) {
+void Sobj_Monster1::Init2(xx::XY const& pos_, xx::Shared<xx::MovePathCache> mpc_) {
 	assert(owner);
 	originalPos = pos_;
 	mpc = std::move(mpc_);
@@ -21,7 +21,7 @@ void Item_Monster1::Init2(xx::XY const& pos_, xx::Shared<xx::MovePathCache> mpc_
 	body.SetScale(owner->scale);
 }
 
-bool Item_Monster1::Update() {
+bool Sobj_Monster1::Update() {
 	auto pair = (std::pair<float, float>&)(*frames)[frameIndex]->ud;
 	movedDistance += speed * pair.first;
 	auto mp = mpc->Move(movedDistance);

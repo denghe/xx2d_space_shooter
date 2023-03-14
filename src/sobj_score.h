@@ -2,7 +2,7 @@
 #include "main.h"
 
 struct Scene_Game;
-struct Item_Score {
+struct Sobj_Score {
 	Scene_Game* owner{};
 	int64_t from{}, to{}, step{};
 

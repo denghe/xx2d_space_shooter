@@ -2,7 +2,7 @@
 #include "main.h"
 
 struct Scene_Game;
-struct Item_DeathEffect {
+struct Sobj_DeathEffect {
 	Scene_Game* owner{};
 	xx::XY pos{};
 	float frameIndex{};

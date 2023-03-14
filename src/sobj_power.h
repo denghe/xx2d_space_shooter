@@ -2,7 +2,7 @@
 #include "main.h"
 
 struct Scene_Game;
-struct Item_Power {
+struct Sobj_Power {
 	Scene_Game* owner{};
 	xx::Shared<xx::MovePathCache> mpc;
 	xx::XY pos{}, inc{};

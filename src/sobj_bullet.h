@@ -2,7 +2,7 @@
 #include "main.h"
 
 struct Scene_Game;
-struct Item_Bullet {
+struct Sobj_Bullet {
 	Scene_Game* owner{};
 	xx::Quad body;
 	xx::XY pos{}, inc{};

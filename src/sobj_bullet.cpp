@@ -1,8 +1,8 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "item_bullet.h"
+#include "sobj_bullet.h"
 
-void Item_Bullet::Init(Scene_Game* owner_, xx::XY const& pos_, int64_t const& damage_) {
+void Sobj_Bullet::Init(Scene_Game* owner_, xx::XY const& pos_, int64_t const& damage_) {
 	owner = owner_;
 	pos = pos_;
 	damage = damage_;
@@ -15,7 +15,7 @@ void Item_Bullet::Init(Scene_Game* owner_, xx::XY const& pos_, int64_t const& da
 	owner->audio.Play("res/3.ogg");
 }
 
-bool Item_Bullet::Update() {
+bool Sobj_Bullet::Update() {
 
 	// collision detection
 	auto& g = owner->monsterGrid;
@@ -24,7 +24,7 @@ bool Item_Bullet::Update() {
 	auto& deadMonsters = owner->tmpMonsters;
 	deadMonsters.clear();
 	int limit = 0x7FFFFFFF;
-	g.Foreach9NeighborCells<true>(idx, [&](Item_Monster* const& m) {
+	g.Foreach9NeighborCells<true>(idx, [&](Sobj_Monster* const& m) {
 		auto d = m->pos - pos;
 		auto rr = (m->radius + radius) * (m->radius + radius);
 		auto dd = d.x * d.x + d.y * d.y;
@@ -48,6 +48,6 @@ bool Item_Bullet::Update() {
 	return pos.y > xx::engine.hh + 100;
 }
 
-void Item_Bullet::Draw() {
+void Sobj_Bullet::Draw() {
 	body.SetPosition(pos).Draw();
 }

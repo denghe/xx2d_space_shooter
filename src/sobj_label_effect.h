@@ -2,7 +2,7 @@
 #include "main.h"
 
 struct Scene_Game;
-struct Item_LabelEffect {
+struct Sobj_LabelEffect {
 	Scene_Game* owner{};
 	xx::XY pos{}, inc{};
 	int64_t avaliableFrameNumber{};

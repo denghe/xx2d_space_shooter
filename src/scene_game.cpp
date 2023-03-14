@@ -119,12 +119,12 @@ int Scene_Game::Update() {
 
 /***********************************************************************/
 
-void Scene_Game::AddMonster(Item_Monster* m) {
+void Scene_Game::AddMonster(Sobj_Monster* m) {
 	m->indexAtOwnerMonsters = monsters.size();
 	monsters.emplace_back(m);
 }
 
-void Scene_Game::EraseMonster(Item_Monster* m) {
+void Scene_Game::EraseMonster(Sobj_Monster* m) {
 	assert(m);
 	assert(m->owner);
 	assert(m->owner == this);
@@ -155,7 +155,7 @@ xx::Coro Scene_Game::SceneLogic() {
 					auto bornPos = v * (xx::engine.hw + 200);
 					auto d = lastPlanePos - bornPos;
 					radians = std::atan2(d.y, d.x);
-					auto m = xx::Make<Item_Monster2>();
+					auto m = xx::Make<Sobj_Monster2>();
 					m->Init1(this, 2.f, { 255,255,255,255 });
 					m->Init2(bornPos, radians);
 					AddMonster(m);
@@ -168,7 +168,7 @@ xx::Coro Scene_Game::SceneLogic() {
 }
 
 xx::Coro Scene_Game::SceneLogic_CreateMonsterTeam(int n, int64_t bonus) {
-	auto dt = xx::Make<Listener<Item_Monster>>([this, n, bonus](Item_Monster* m) mutable {
+	auto dt = xx::Make<Listener<Sobj_Monster>>([this, n, bonus](Sobj_Monster* m) mutable {
 		if (--n == 0) {
 			score.Add(bonus);
 			labels.emplace_back().Emplace()->Init(this, m->pos, xx::ToString("+", bonus));	// show label effect
@@ -179,7 +179,7 @@ xx::Coro Scene_Game::SceneLogic_CreateMonsterTeam(int n, int64_t bonus) {
 		}
 		});
 	for (int i = 0; i < n; i++) {
-		auto m = xx::Make<Item_Monster1>();
+		auto m = xx::Make<Sobj_Monster1>();
 		m->Init1(this, 4.f, { 255,255,255,255 }, dt);
 		m->Init2({ -1000, 300 }, movePaths.monsterTeam);
 		AddMonster(m);

@@ -7,7 +7,7 @@ template<typename T>
 using Listener_s = xx::Shared<Listener<T>>;
 
 struct Scene_Game;
-struct Item_Monster : xx::SpaceGridCItem<Item_Monster> {
+struct Sobj_Monster : xx::SpaceGridCItem<Sobj_Monster> {
 	Scene_Game* owner{};
 	size_t indexAtOwnerMonsters{ std::numeric_limits<size_t>::max() };
 
@@ -15,15 +15,15 @@ struct Item_Monster : xx::SpaceGridCItem<Item_Monster> {
 	float radius{}, radians{}, speed{}, frameIndex{}, frameStep{};
 	int64_t hp{}, maxHP{}, hitEffectExpireFrameNumber{};
 
-	Listener_s<Item_Monster> deathListener;
+	Listener_s<Sobj_Monster> deathListener;
 	std::vector<xx::Shared<xx::Frame>>* frames{};
 	xx::Quad body;
 	xx::RGBA8 color;
 
-	void Init1(Scene_Game* owner_, float const& speed_ = 1.f, xx::RGBA8 const& color_ = { 255,255,255,255 }, Listener_s<Item_Monster> deathListener_ = {});
+	void Init1(Scene_Game* owner_, float const& speed_ = 1.f, xx::RGBA8 const& color_ = { 255,255,255,255 }, Listener_s<Sobj_Monster> deathListener_ = {});
 	virtual bool Update() = 0;
 	void UpdateFrameIndex();
 	bool Hit(int64_t const& damage);	// return true: dead
 	void Draw();
-	virtual ~Item_Monster();
+	virtual ~Sobj_Monster();
 };

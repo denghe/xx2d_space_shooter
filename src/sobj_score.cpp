@@ -1,19 +1,19 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "item_score.h"
+#include "sobj_score.h"
 
-void Item_Score::Init(Scene_Game* const& owner_) {
+void Sobj_Score::Init(Scene_Game* const& owner_) {
 	owner = owner_;
 	step = 1;
 }
-void Item_Score::Add(int64_t const& offset) {
+void Sobj_Score::Add(int64_t const& offset) {
 	to += offset;
 	step = (to - from) / 120 * 2;
 	if (step < 1) {
 		step = 1;
 	}
 }
-void Item_Score::Update() {
+void Sobj_Score::Update() {
 	if (from < to) {
 		from += step;
 		if (from > to) {
@@ -21,7 +21,7 @@ void Item_Score::Update() {
 		}
 	}
 }
-void Item_Score::Draw() {
+void Sobj_Score::Draw() {
 	auto s = std::to_string(from);
 	auto siz = s.size();
 	auto& fs = owner->frames.number;

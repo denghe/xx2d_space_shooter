@@ -1,8 +1,8 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "item_plane.h"
+#include "sobj_plane.h"
 
-void Item_Plane::Init(Scene_Game* owner, xx::XY const& bornPos, int64_t const& invincibleTime) {
+void Sobj_Plane::Init(Scene_Game* owner, xx::XY const& bornPos, int64_t const& invincibleTime) {
 	this->owner = owner;
 	pos = bornPos;
 	inc = {};
@@ -17,7 +17,7 @@ void Item_Plane::Init(Scene_Game* owner, xx::XY const& bornPos, int64_t const& i
 	body.SetFrame(owner->frames.plane[1]).SetScale(owner->scale);
 }
 
-bool Item_Plane::Update() {
+bool Sobj_Plane::Update() {
 
 	// move body
 	//if (xx::engine.Pressed(xx::Mbtns::Left) || xx::engine.Pressed(xx::Mbtns::Right)) {
@@ -121,7 +121,7 @@ bool Item_Plane::Update() {
 	return false;
 }
 
-void Item_Plane::Draw() {
+void Sobj_Plane::Draw() {
 	body.SetFrame(owner->frames.plane[size_t(frame + 0.5f)])
 		.SetPosition(pos)
 		.SetColor(invincibleFrameNumber > owner->frameNumber ? xx::RGBA8{ 127,127,127,220 } : xx::RGBA8{ 255,255,255,255 })

@@ -2,15 +2,15 @@
 #include "menu_item.h"
 
 
-bool MenuItem::HandleMouseDown(MenuItem_MouseEventListener& L) {
+bool MenuItem::HandleMouseDown(MenuSobj_MouseEventListener& L) {
 	return Inside(L.downPos);
 }
 
-int MenuItem::HandleMouseMove(MenuItem_MouseEventListener& L) {
+int MenuItem::HandleMouseMove(MenuSobj_MouseEventListener& L) {
 	return 0;
 }
 
-void MenuItem::HandleMouseUp(MenuItem_MouseEventListener& L) {
+void MenuItem::HandleMouseUp(MenuSobj_MouseEventListener& L) {
 	if (Inside(xx::engine.mousePosition)) {
 		handler();
 	}

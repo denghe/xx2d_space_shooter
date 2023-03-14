@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "main.h"
-#include "item_monster.h"
+#include "sobj_monster.h"
 
-struct Item_Monster1 : Item_Monster {
+struct Sobj_Monster1 : Sobj_Monster {
 	xx::Shared<xx::MovePathCache> mpc;
 	xx::XY originalPos{};
 	float movedDistance{};

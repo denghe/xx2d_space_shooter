@@ -1,8 +1,8 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "item_label_effect.h"
+#include "sobj_label_effect.h"
 
-void Item_LabelEffect::Init(Scene_Game* const& owner_, xx::XY const& pos_, std::string_view const& txt_) {
+void Sobj_LabelEffect::Init(Scene_Game* const& owner_, xx::XY const& pos_, std::string_view const& txt_) {
 	owner = owner_;
 	pos = pos_;
 
@@ -12,11 +12,11 @@ void Item_LabelEffect::Init(Scene_Game* const& owner_, xx::XY const& pos_, std::
 	body.SetText(owner->looper->fnt, txt_, 64);
 }
 
-bool Item_LabelEffect::Update() {
+bool Sobj_LabelEffect::Update() {
 	pos += inc;
 	return avaliableFrameNumber < owner->frameNumber;
 }
 
-void Item_LabelEffect::Draw() {
+void Sobj_LabelEffect::Draw() {
 	body.SetPosition(pos).Draw();
 }

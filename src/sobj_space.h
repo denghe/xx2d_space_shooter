@@ -2,7 +2,7 @@
 #include "main.h"
 
 struct Scene_Game;
-struct Item_Space {
+struct Sobj_Space {
 	Scene_Game* owner{};
 	xx::Quad body;
 	float yPos{}, yInc{}, ySize{};

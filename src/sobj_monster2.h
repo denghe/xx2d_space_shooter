@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "main.h"
-#include "item_monster.h"
+#include "sobj_monster.h"
 
-struct Item_Monster2 : Item_Monster {
+struct Sobj_Monster2 : Sobj_Monster {
 	xx::XY inc{};
 	int64_t avaliableFrameNumber{};
 

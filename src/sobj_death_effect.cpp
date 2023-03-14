@@ -1,8 +1,8 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "item_death_effect.h"
+#include "sobj_death_effect.h"
 
-void Item_DeathEffect::Init(Scene_Game* const& owner_, xx::XY const& pos_, float const& scale) {
+void Sobj_DeathEffect::Init(Scene_Game* const& owner_, xx::XY const& pos_, float const& scale) {
 	owner = owner_;
 	pos = pos_;
 
@@ -10,11 +10,11 @@ void Item_DeathEffect::Init(Scene_Game* const& owner_, xx::XY const& pos_, float
 	owner->audio.Play("res/1.ogg");
 }
 
-bool Item_DeathEffect::Update() {
+bool Sobj_DeathEffect::Update() {
 	frameIndex += 0.1f;
 	return frameIndex >= owner->frames.effect.size();
 }
 
-void Item_DeathEffect::Draw() {
+void Sobj_DeathEffect::Draw() {
 	body.SetFrame(owner->frames.effect[(size_t)frameIndex]).Draw();
 }
