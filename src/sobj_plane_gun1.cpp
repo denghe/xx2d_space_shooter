@@ -1,6 +1,7 @@
 ﻿#include "main.h"
 #include "scene_game.h"
 #include "sobj_plane.h"
+#include "sobj_plane_bullet1.h"
 #include "sobj_plane_gun1.h"
 
 void Sobj_PlaneGun1::Init(Sobj_Plane* plane_) {
@@ -18,8 +19,9 @@ void Sobj_PlaneGun1::Update() {
 		auto step = 2 * scene->scale;
 		float x = -level / 2 * step;
 		for (int i = 0; i < level; i++) {
-			auto&& b = scene->bullets.emplace_back().Emplace();
+			auto b = xx::Make<Sobj_PlaneBullet1>();
 			b->Init(scene, plane->pos + xx::XY{ x + i * step, 8 * scene->scale }, M_PI_2, bulletDamage);
+			scene->bullets.emplace_back(std::move(b));
 		}
 	}
 }

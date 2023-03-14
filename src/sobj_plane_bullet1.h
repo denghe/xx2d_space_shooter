@@ -1,8 +1,7 @@
 ﻿#pragma once
-#include "main.h"
+#include "sobj_plane_bullet.h"
 
-struct Scene_Game;
-struct Sobj_Bullet {
+struct Sobj_PlaneBullet1 : Sobj_PlaneBullet {
 	Scene_Game* scene{};
 	xx::Quad body;
 	xx::XY pos{}, inc{};
@@ -10,6 +9,6 @@ struct Sobj_Bullet {
 	int64_t damage{};
 
 	void Init(Scene_Game* scene_, xx::XY const& pos_, float const& radians, int64_t const& power_);
-	bool Update();
-	void Draw();
+	bool Update() override;
+	void Draw() override;
 };

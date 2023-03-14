@@ -23,6 +23,8 @@ void Sobj_Monster3::Init2(xx::XY const& pos_) {
 }
 
 bool Sobj_Monster3::Update() {
+	// todo: keeping follow plane
+
 	//pos += inc;
 	//SGCUpdate(pos.As<int32_t>() + scene->monsterGrid.maxX / 2);
 	//UpdateFrameIndex();

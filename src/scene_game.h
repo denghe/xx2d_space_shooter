@@ -2,7 +2,7 @@
 #include "main.h"
 #include "manager_frames.h"
 #include "manager_movepaths.h"
-#include "sobj_bullet.h"
+#include "sobj_plane_bullet.h"
 #include "sobj_death_effect.h"
 #include "sobj_label_effect.h"
 #include "sobj_monster.h"
@@ -29,7 +29,7 @@ struct Scene_Game : SceneBase {
 
 	xx::Shared<Sobj_Plane> plane;
 
-	std::vector<xx::Shared<Sobj_Bullet>> bullets;
+	std::vector<xx::Shared<Sobj_PlaneBullet>> bullets;
 
 	xx::SpaceGridC<Sobj_Monster> monsterGrid;			// ensure life cycle > monsters
 	std::vector<xx::Shared<Sobj_Monster>> monsters;

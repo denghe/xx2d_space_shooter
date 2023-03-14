@@ -1,6 +1,7 @@
 ﻿#include "main.h"
 #include "scene_game.h"
 #include "sobj_plane.h"
+#include "sobj_plane_bullet2.h"
 #include "sobj_plane_gun2.h"
 
 void Sobj_PlaneGun2::Init(Sobj_Plane* plane_) {
@@ -17,12 +18,24 @@ void Sobj_PlaneGun2::Update() {
 		fireableFrameNumber = scene->frameNumber + fireCD;
 
 		float r{ M_PI_2 };
-		scene->bullets.emplace_back( ).Emplace()->Init(scene, plane->pos + xx::XY{ 0, 8 * scene->scale }, r, bulletDamage);
+		{
+			auto b = xx::Make<Sobj_PlaneBullet2>();
+			b->Init(scene, plane->pos + xx::XY{ 0, 8 * scene->scale }, r, bulletDamage);
+			scene->bullets.emplace_back(std::move(b));
+		}
 		for (size_t i = 1; i <= level; ++i) {
 			auto r1 = r + 0.1f * (float)i;
-			scene->bullets.emplace_back().Emplace()->Init(scene, plane->pos + xx::XY{ 0, 8 * scene->scale }, r1, bulletDamage);
+			{
+				auto b = xx::Make<Sobj_PlaneBullet2>();
+				b->Init(scene, plane->pos + xx::XY{ 0, 8 * scene->scale }, r1, bulletDamage);
+				scene->bullets.emplace_back(std::move(b));
+			}
 			auto r2 = r - 0.1f * (float)i;
-			scene->bullets.emplace_back().Emplace()->Init(scene, plane->pos + xx::XY{ 0, 8 * scene->scale }, r2, bulletDamage);
+			{
+				auto b = xx::Make<Sobj_PlaneBullet2>();
+				b->Init(scene, plane->pos + xx::XY{ 0, 8 * scene->scale }, r2, bulletDamage);
+				scene->bullets.emplace_back(std::move(b));
+			}
 		}
 	}
 }

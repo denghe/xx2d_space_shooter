@@ -1,8 +1,8 @@
 ﻿#include "main.h"
 #include "scene_game.h"
-#include "sobj_bullet.h"
+#include "sobj_plane_bullet2.h"
 
-void Sobj_Bullet::Init(Scene_Game* scene_, xx::XY const& pos_, float const& radians, int64_t const& damage_) {
+void Sobj_PlaneBullet2::Init(Scene_Game* scene_, xx::XY const& pos_, float const& radians, int64_t const& damage_) {
 	scene = scene_;
 	pos = pos_;
 	damage = damage_;
@@ -11,11 +11,11 @@ void Sobj_Bullet::Init(Scene_Game* scene_, xx::XY const& pos_, float const& radi
 	inc = xx::XY{ std::cos(radians), std::sin(radians) } * speed;
 	radius = 2 * scene->scale;
 
-	body.SetFrame(scene->frames.bullet[0]).SetScale(scene->scale);
-	scene->audio.Play("res/3.ogg");
+	body.SetFrame(scene->frames.bullet[1]).SetScale(scene->scale);
+	scene->audio.Play("res/6.ogg");
 }
 
-bool Sobj_Bullet::Update() {
+bool Sobj_PlaneBullet2::Update() {
 
 	// collision detection
 	auto& g = scene->monsterGrid;
@@ -48,6 +48,6 @@ bool Sobj_Bullet::Update() {
 	return pos.y > xx::engine.hh + 100;
 }
 
-void Sobj_Bullet::Draw() {
+void Sobj_PlaneBullet2::Draw() {
 	body.SetPosition(pos).Draw();
 }
