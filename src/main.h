@@ -24,6 +24,6 @@ struct GameLooper : xx::GameLooperBase {
 		});
 	}
 
-	int Init() override;
+	void Init() override;
 	int Update() override;
 };
