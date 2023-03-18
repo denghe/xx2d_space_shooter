@@ -9,7 +9,7 @@ void Sobj_Plane::Init(Scene_Game* scene, xx::XY const& bornPos, int64_t const& i
 	this->scene = scene;
 	pos = bornPos;
 	inc = {};
-	speed = 0.5f * scene->scale;
+	speed = 0.8f * scene->scale;
 	frame = 2;	// 1 ~ 3
 	radius = 7 * scene->scale;
 	invincibleFrameNumber = scene->frameNumber + invincibleTime;
@@ -54,49 +54,18 @@ bool Sobj_Plane::Update() {
 	// collision detection with P
 	for (auto i = (ptrdiff_t)scene->powers.size() - 1; i >= 0; --i) {
 		auto& o = scene->powers[i];
-		auto d = o->pos - pos;
-		auto rr = (o->radius + radius) * (o->radius + radius);
-		auto dd = d.x * d.x + d.y * d.y;
-		if (dd < rr) {
-
-			switch (o->typeId) {
-			case 0:
-				gun->LevelUp();
-				break;
-			case 1:
-				gun->SpeedUp();
-				break;
-			case 2:
-				gun->PowerUp();
-				break;
-			case 3:
-				speed *= 2;
-				scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("move speed up!"));	// show label effect
-				break;
-			case 4:
-			{
-				auto newGun = xx::Make<Sobj_PlaneGun2>();
-				newGun->InitFrom(gun.pointer);
-				gun = std::move(newGun);
-				scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("change to gun 2!"));	// show label effect
-				break;
-			}
-			case 5:
-			{
-				auto newGun = xx::Make<Sobj_PlaneGun1>();
-				newGun->InitFrom(gun.pointer);
-				gun = std::move(newGun);
-				scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("change to gun 1!"));	// show label effect
-				break;
-			}
-			default:
-				throw std::logic_error("unhandled typeId");
-			}
+		if (TryEatPower(o->pos, o->radius, o->typeId)) {
 			o = scene->powers.back();
 			scene->powers.pop_back();
 		}
 	}
-
+	for (auto i = (ptrdiff_t)scene->power2s.size() - 1; i >= 0; --i) {
+		auto& o = scene->power2s[i];
+		if (TryEatPower(o->pos, o->radius, o->typeId)) {
+			o = scene->power2s.back();
+			scene->power2s.pop_back();
+		}
+	}
 
 	// change frame display
 	constexpr float finc = 0.1f, fmin = 1.f, fmid = 2.f, fmax = 3.f;
@@ -127,6 +96,49 @@ bool Sobj_Plane::Update() {
 	// auto shoot
 	gun->Update();
 
+	return false;
+}
+
+bool Sobj_Plane::TryEatPower(xx::XY const& powerPos, float const& powerRadius, int const& powerTypeId) {
+	auto d = powerPos - pos;
+	auto rr = (powerRadius + radius) * (powerRadius + radius);
+	auto dd = d.x * d.x + d.y * d.y;
+	if (dd < rr) {
+		switch (powerTypeId) {
+		case 0:
+			gun->LevelUp();
+			break;
+		case 1:
+			gun->SpeedUp();
+			break;
+		case 2:
+			gun->PowerUp();
+			break;
+		case 3:
+			speed *= 2;
+			scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("move speed up!"));	// show label effect
+			break;
+		case 4:
+		{
+			auto newGun = xx::Make<Sobj_PlaneGun2>();
+			newGun->InitFrom(gun.pointer);
+			gun = std::move(newGun);
+			scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("change to gun 2!"));	// show label effect
+			break;
+		}
+		case 5:
+		{
+			auto newGun = xx::Make<Sobj_PlaneGun1>();
+			newGun->InitFrom(gun.pointer);
+			gun = std::move(newGun);
+			scene->labels.emplace_back().Emplace()->Init(scene, pos, xx::ToString("change to gun 1!"));	// show label effect
+			break;
+		}
+		default:
+			throw std::logic_error("unhandled typeId");
+		}
+		return true;
+	}
 	return false;
 }
 

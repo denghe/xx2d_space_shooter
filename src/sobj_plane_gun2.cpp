@@ -48,11 +48,14 @@ void Sobj_PlaneGun2::LevelUp() {
 }
 
 void Sobj_PlaneGun2::PowerUp() {
-	bulletDamage += 10;
+	bulletDamage += 1;
 	scene->labels.emplace_back().Emplace()->Init(scene, plane->pos, xx::ToString("bullet damage up!"));	// show label effect
 }
 
 void Sobj_PlaneGun2::SpeedUp() {
-	fireCD /= 2;
+	fireCD -= 1;
+	if (fireCD < 0) {
+		fireCD = 0;
+	}
 	scene->labels.emplace_back().Emplace()->Init(scene, plane->pos, xx::ToString("fire speed up!"));	// show label effect
 }

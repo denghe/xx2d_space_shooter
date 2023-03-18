@@ -28,5 +28,32 @@ _______|_____/
 	mp.FillCurve(false, { {-1000, 0 }, {-500, 400 }, { 200, 0 }, { 200, -200 }, { 0, -250 }, { -200, -200 }, { -200, 0 }, { 500, 400 }, { 1000, 0 } });	// for stuff
 	monsterStyleM.Emplace()->Init(mp);
 
-	// todo: more fill
+	// load move path config file, fill to monsters
+	xx::CurvesPointsCollection cpsc;
+	auto [d, p] = xx::engine.ReadAllBytes("res/movepath.bin");
+	if (int r = d.Read(cpsc)) {
+		throw std::logic_error(xx::ToString("read CurvesPointsCollection from ", p, " error! r = ", r));
+	}
+	monsters.reserve(cpsc.data.size());
+	for (auto& cps : cpsc.data) {
+		mp.Clear();
+		mp.FillCurve(cps.isLoop, cps.points);
+
+		auto mpc = xx::Make<xx::MovePathCache>();
+		mpc->Init(mp, 1);
+		monsters.emplace_back(std::move(cps.name), std::move(mpc));
+	}
+}
+
+xx::Shared<xx::MovePathCache> const& Manager_MovePaths::operator[](size_t const& idx) const {
+	return monsters[idx].second;
+}
+
+xx::Shared<xx::MovePathCache> const& Manager_MovePaths::operator[](std::string_view const& name) const {
+	for (auto& pair : monsters) {
+		if (pair.first == name) {
+			return pair.second;
+		}
+	}
+	throw std::logic_error(xx::ToString("can't find movepath: ", name));
 }

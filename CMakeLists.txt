@@ -46,8 +46,6 @@ if(MSVC)	# vs2022+
 	set_source_files_properties(src/main.cpp PROPERTIES COMPILE_FLAGS "/Ycmain.h")
 	target_compile_options(${name} PRIVATE $<$<PLATFORM_ID:Windows>:/Yumain.h>)
 
-	add_definitions("-D_SECURE_SCL=0")
-	add_definitions("-D_HAS_ITERATOR_DEBUGGING=0")
 	add_compile_options($<$<PLATFORM_ID:Windows>:/MP${Biogears_BUILD_PARALLEL_LEVEL}>)	# other proj enable multi-processor compilation
 
 	target_compile_options(${name}

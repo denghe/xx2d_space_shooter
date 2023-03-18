@@ -14,4 +14,5 @@ struct Sobj_Plane {
 	void Init(Scene_Game* scene_, xx::XY const& bornPos = {}, int64_t const& invincibleTime_ = 0);
 	bool Update();
 	void Draw();
+	bool TryEatPower(xx::XY const& pos, float const& radius, int const& typeId);
 };

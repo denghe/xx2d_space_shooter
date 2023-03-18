@@ -45,7 +45,8 @@ bool Sobj_PlaneBullet1::Update() {
 	if (damage <= 0) return true;
 
 	pos += inc;
-	return pos.y > xx::engine.hh + 100;
+	
+	return pos.x < scene->minXY.x || pos.y < scene->minXY.y || pos.x > scene->maxXY.x || pos.y > scene->maxXY.y;
 }
 
 void Sobj_PlaneBullet1::Draw() {

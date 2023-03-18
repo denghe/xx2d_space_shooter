@@ -20,7 +20,7 @@ void Scene_Game::Init(GameLooper* looper) {
 	// ...
 
 	// play bg music
-	audio.PlayBG("res/bg.ogg");
+	//audio.PlayBG("res/bg.ogg");
 
 	// run stage
 	stages.Init(this);
@@ -32,6 +32,9 @@ void Scene_Game::Init(GameLooper* looper) {
 /***********************************************************************/
 
 int Scene_Game::Update() {
+
+	minXY = { -xx::engine.hw - 100, -xx::engine.hh - 100 };
+	maxXY = { xx::engine.hw + 100, xx::engine.hh + 100 };
 
 	timePool += xx::engine.delta;
 	while (timePool >= 1.f / 120) {
@@ -90,6 +93,13 @@ int Scene_Game::Update() {
 				powers.pop_back();
 			}
 		}
+		for (auto i = (ptrdiff_t)power2s.size() - 1; i >= 0; --i) {
+			auto& o = power2s[i];
+			if (o->Update()) {
+				o = power2s.back();
+				power2s.pop_back();
+			}
+		}
 
 		// show death effects
 		for (auto i = (ptrdiff_t)deathEffects.size() - 1; i >= 0; --i) {
@@ -111,6 +121,7 @@ int Scene_Game::Update() {
 	if (plane) plane->Draw();
 	for (auto& o : deathEffects) o->Draw();
 	for (auto& o : bullets) o->Draw();
+	for (auto& o : power2s) o->Draw();
 	for (auto& o : powers) o->Draw();
 	for (auto& o : labels) o->Draw();
 	score.Draw();

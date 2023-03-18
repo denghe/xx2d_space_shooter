@@ -17,18 +17,46 @@ xx::Coro Stage1::CoEnter() {
 	
 	scene->coros.Add(scene->CoShowStageTitle("stage 1"));				// show stage title
 
-	for (size_t i = 0; i < 10; i++) {
-		scene->coros.Add(CoCreateMonsterTeam(1, 2000));					// make some monster1 team
-		CoSleep(0.5s);
-	}
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-1a"sv], 5, 3));
+	CoSleep(4s);
 
-	CoSleep(10s);														// wait some time
-	
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-1b"sv], 5, 0));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-2a"sv], 5, 1));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-2b"sv], 5, 2));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-3a"sv], 5, 3));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-3b"sv], 5, 4));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-4a"sv], 5, 0));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-4b"sv], 5, 1));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-5a"sv], 5, 2));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-5b"sv], 5, 0));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-6a"sv], 5, 1));
+	CoSleep(3s);
+
+	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-6b"sv], 5, 2));
+	CoSleep(3s);
+
 	scene->coros.Add(CoCreateMonsters(120 * 5, 10));					// make some random monster2
-	
-	CoSleep(10s);														// wait some time
+	CoSleep(10s);
 
-	scene->stages.GoNext();												// next stage
+	scene->stages.GoNext();
 }
 
 xx::Coro Stage1::CoCreateMonsters(int n1, int n2) {
@@ -54,23 +82,18 @@ xx::Coro Stage1::CoCreateMonsters(int n1, int n2) {
 	}
 }
 
-xx::Coro Stage1::CoCreateMonsterTeam(int n, int64_t bonus) {
+xx::Coro Stage1::CoCreateMonsterTeam(xx::Shared<xx::MovePathCache> mpc, int n, int stuffTypeId) {
 	// team death counter
-	auto dt = xx::Make<Listener<Sobj_Monster>>([this, n, bonus](Sobj_Monster* m) mutable {
+	auto dt = xx::Make<Listener<Sobj_Monster>>([this, n, stuffTypeId](Sobj_Monster* m) mutable {
 		if (--n == 0) {
-			scene->score.Add(bonus);
-			scene->labels.emplace_back().Emplace()->Init(scene, m->pos, xx::ToString("+", bonus));	// show label effect
-			scene->powers.emplace_back().Emplace()->Init(scene, m->pos, scene->stuffTypeId++);	// drop P
-			if (scene->stuffTypeId >= scene->frames.stuff.size()) {
-				scene->stuffTypeId = 0;
-			}
+			scene->power2s.emplace_back().Emplace()->Init(scene, m->pos, stuffTypeId);	// all dead: drop stuff
 		}
 	});
 	// create team members
 	for (int i = 0; i < n; i++) {
 		auto m = xx::Make<Sobj_Monster1>();
 		m->Init1(scene, 4.f, { 255,255,255,255 }, dt);
-		m->Init2({}, scene->movePaths.monsterStyleM);
+		m->Init2({}, mpc);
 		scene->AddMonster(m);
 		CoSleep(600ms);
 	}

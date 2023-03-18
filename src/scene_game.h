@@ -10,6 +10,7 @@
 #include "sobj_monster2.h"
 #include "sobj_plane.h"
 #include "sobj_power.h"
+#include "sobj_power2.h"
 #include "sobj_score.h"
 #include "sobj_space.h"
 // ...
@@ -38,6 +39,7 @@ struct Scene_Game : SceneBase {
 	std::vector<xx::Shared<Sobj_LabelEffect>> labels;
 
 	std::vector<xx::Shared<Sobj_Power>> powers;
+	std::vector<xx::Shared<Sobj_Power2>> power2s;
 
 	std::vector<xx::Shared<Sobj_DeathEffect>> deathEffects;
 
@@ -57,6 +59,7 @@ struct Scene_Game : SceneBase {
 	xx::Rnd rnd;
 	int stuffTypeId{};
 
+	xx::XY minXY{}, maxXY{};	// for screen display bonding box check
 
 
 	// utils
