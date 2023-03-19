@@ -1,6 +1,6 @@
 # desc
 
-space shooter game ( example by xx2d )
+space shooter game ( example for xx2d )
 
 # compile requires
 
