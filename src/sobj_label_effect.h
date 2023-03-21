@@ -7,7 +7,7 @@ struct Sobj_LabelEffect {
 	xx::XY pos{}, inc{};
 	uint8_t alpha{ 255 };
 	int64_t avaliableFrameNumber{};
-	xx::Label body;
+	xx::SimpleLabel body;
 
 	void Init(Scene_Game* const& scene_, xx::XY const& pos_, std::string_view const& txt_);
 	bool Update();

@@ -43,7 +43,7 @@ struct Scene_Game : SceneBase {
 
 	std::vector<xx::Shared<Sobj_DeathEffect>> deathEffects;
 
-	xx::Shared<xx::Label> stageTitle;	// manage by stage
+	xx::Shared<xx::SimpleLabel> stageTitle;	// manage by stage
 	// ...
 
 	xx::Audio audio;
