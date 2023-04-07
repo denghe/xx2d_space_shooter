@@ -38,7 +38,7 @@ struct Scene_Game : SceneBase {
 	std::vector<Sobj_Monster*> tmpMonsters;
 
 	std::vector<xx::Shared<Sobj_LabelEffect>> labels;
-	xx::ListLink<Sobj_ExplodeEffect, int, 0> explodes;
+	xx::ListLink<xx::Shared<Sobj_ExplodeEffect>> explodes;
 
 	std::vector<xx::Shared<Sobj_Power>> powers;
 	std::vector<xx::Shared<Sobj_Power2>> power2s;

@@ -43,7 +43,7 @@ bool Sobj_PlaneBullet2::Update() {
 		scene->EraseMonster(m);
 	}
 	if (damage <= 0) {
-		scene->explodes.Emplace().Init(scene, pos);
+		scene->explodes.Emplace().Emplace()->Init(scene, pos);
 		return true;
 	}
 
