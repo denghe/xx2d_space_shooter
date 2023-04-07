@@ -13,6 +13,7 @@
 #include "sobj_power2.h"
 #include "sobj_score.h"
 #include "sobj_space.h"
+#include "sobj_explode_effect.h"
 // ...
 #include "stage.h"
 // ...
@@ -37,6 +38,7 @@ struct Scene_Game : SceneBase {
 	std::vector<Sobj_Monster*> tmpMonsters;
 
 	std::vector<xx::Shared<Sobj_LabelEffect>> labels;
+	xx::ListLink<Sobj_ExplodeEffect, int, 0> explodes;
 
 	std::vector<xx::Shared<Sobj_Power>> powers;
 	std::vector<xx::Shared<Sobj_Power2>> power2s;

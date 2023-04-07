@@ -30,7 +30,7 @@ _______|_____/
 
 	// load move path config file, fill to monsters
 	xx::CurvesPointsCollection cpsc;
-	auto [d, p] = xx::engine.ReadAllBytes("res/movepath.bin");
+	auto [d, p] = xx::engine.LoadFileData("res/movepath.bin");
 	if (int r = d.Read(cpsc)) {
 		throw std::logic_error(xx::ToString("read CurvesPointsCollection from ", p, " error! r = ", r));
 	}

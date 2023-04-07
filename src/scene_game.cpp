@@ -18,6 +18,7 @@ void Scene_Game::Init(GameLooper* looper) {
 	space.Init(this);
 	score.Init(this);
 	// ...
+	explodes.Reserve(10000);
 
 	// play bg music
 	//audio.PlayBG("res/bg.ogg");
@@ -101,7 +102,7 @@ int Scene_Game::Update() {
 			}
 		}
 
-		// show death effects
+		// calc death effects
 		for (auto i = (ptrdiff_t)deathEffects.size() - 1; i >= 0; --i) {
 			auto& o = deathEffects[i];
 			if (o->Update()) {
@@ -109,6 +110,9 @@ int Scene_Game::Update() {
 				deathEffects.pop_back();
 			}
 		}
+
+		// calc explodes
+		explodes.Foreach([](auto& o) { return o.Update(); });
 
 		// refresh score
 		score.Update();
@@ -119,6 +123,8 @@ int Scene_Game::Update() {
 	space.Draw();
 	for (auto& o : monsters) o->Draw();
 	if (plane) plane->Draw();
+	explodes.Foreach([](auto& o) { o.Draw1(); });
+	explodes.Foreach([](auto& o) { o.Draw2(); });
 	for (auto& o : deathEffects) o->Draw();
 	for (auto& o : bullets) o->Draw();
 	for (auto& o : power2s) o->Draw();
@@ -127,7 +133,6 @@ int Scene_Game::Update() {
 	score.Draw();
 	if (stageTitle) stageTitle->Draw();
 	// ...
-
 
 	return 0;
 }

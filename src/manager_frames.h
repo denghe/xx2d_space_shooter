@@ -16,4 +16,7 @@ struct Manager_Frames {
 	std::vector<xx::Shared<xx::Frame>> effect;			// e1 ~ 5
 	std::vector<xx::Shared<xx::Frame>> stuff;			// po1 ~ 3, ph, ps, pc
 	std::vector<xx::Shared<xx::Frame>> text;			// tstart, tgameover
+
+	xx::Shared<xx::GLTexture> texRing, texStar;		// p11.png   p1.png
+	xx::Shared<xx::ParticleConfig> particleCfg;
 };
