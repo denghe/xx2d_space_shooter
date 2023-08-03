@@ -7,29 +7,29 @@ void Stage3::Init(Scene_Game* scene_) {
 }
 
 void Stage3::Enter() {
-	scene->coros.Add(CoEnter());
+	scene->tasks.AddTask(CoEnter());
 }
 
 void Stage3::Leave() {
 }
 
-xx::Coro Stage3::CoEnter() {
+xx::Task<> Stage3::CoEnter() {
 	
-	scene->coros.Add(scene->CoShowStageTitle("stage 3"));				// show stage title
+	scene->tasks.AddTask(scene->CoShowStageTitle("stage 3"));				// show stage title
 
 	for (size_t i = 0; i < 10; i++) {
-		scene->coros.Add(CoCreateMonsterTeam(1, 2000));					// make some monster1 team
-		CoSleep(0.5s);
+		scene->tasks.AddTask(CoCreateMonsterTeam(1, 2000));					// make some monster1 team
+		co_await xx::engine.TaskSleep(0.5);
 	}
 	
-	scene->coros.Add(CoCreateMonsters(120 * 5, 10));					// make some random monster2
+	scene->tasks.AddTask(CoCreateMonsters(120 * 5, 10));					// make some random monster2
 	
-	CoSleep(10s);														// wait some time
+	co_await xx::engine.TaskSleep(10);									// wait some time
 
 	scene->stages.GoNext();												// next stage
 }
 
-xx::Coro Stage3::CoCreateMonsters(int n1, int n2) {
+xx::Task<> Stage3::CoCreateMonsters(int n1, int n2) {
 	// i: num frames
 	for (int i = 0; i < n1; i++) {
 
@@ -48,11 +48,11 @@ xx::Coro Stage3::CoCreateMonsters(int n1, int n2) {
 			scene->AddMonster(m);
 		}
 
-		CoYield;	// step frame
+		co_yield 0;	// step frame
 	}
 }
 
-xx::Coro Stage3::CoCreateMonsterTeam(int n, int64_t bonus) {
+xx::Task<> Stage3::CoCreateMonsterTeam(int n, int64_t bonus) {
 	// team death counter
 	auto dt = xx::Make<Listener<Sobj_Monster>>([this, n, bonus](Sobj_Monster* m) mutable {
 		if (--n == 0) {
@@ -70,6 +70,6 @@ xx::Coro Stage3::CoCreateMonsterTeam(int n, int64_t bonus) {
 		m->Init1(scene, 4.f, { 255,255,255,255 }, dt);
 		m->Init2({ -1000, 300 }, scene->movePaths.monsterTeam);
 		scene->AddMonster(m);
-		CoSleep(600ms);
+		co_await xx::engine.TaskSleep(0.6);
 	}
 }

@@ -50,7 +50,7 @@ struct Scene_Game : SceneBase {
 
 	xx::Audio audio;
 
-	xx::Coros coros;
+	xx::Tasks tasks;
 
 	Stages stages;
 
@@ -65,8 +65,8 @@ struct Scene_Game : SceneBase {
 
 
 	// utils
-	xx::Coro CoShowStageTitle(std::string_view const& txt);
-	xx::Coro CoPlaneReborn(xx::XY bornPos = {}, std::chrono::steady_clock::duration const& delay = 3s);
+	xx::Task<> CoShowStageTitle(std::string_view const& txt);
+	xx::Task<> CoPlaneReborn(xx::XY bornPos = {}, double const& delay = 3);
 
 	void AddMonster(Sobj_Monster* m);	// insert into monsters & sync index
 	void EraseMonster(Sobj_Monster* m);	// remove from monsters & clear index

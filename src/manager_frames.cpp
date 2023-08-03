@@ -4,7 +4,7 @@
 void Manager_Frames::Init() {
 	// res preload
 	xx::TP tp;
-	tp.Fill("res/space_shooter.plist");
+	tp.Load("res/space_shooter.plist");
 
 	tp.GetTo(plane, { "p" });
 	tp.GetToByPrefix(plane, "p");

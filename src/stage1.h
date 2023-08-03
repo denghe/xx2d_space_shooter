@@ -7,9 +7,9 @@ struct Stage1 : Stage {
 	void Enter() override;
 	void Leave() override;
 
-	xx::Coro CoEnter();
-	xx::Coro CoCreateMonsterTeam(xx::Shared<xx::MovePathCache> mpc, int num, int stuffTypeId);
-	xx::Coro CoCreateMonsters(int n1, int n2);
+	xx::Task<> CoEnter();
+	xx::Task<> CoCreateMonsterTeam(xx::Shared<xx::MovePathCache> mpc, int num, int stuffTypeId);
+	xx::Task<> CoCreateMonsters(int n1, int n2);
 
 	// todo: env
 };

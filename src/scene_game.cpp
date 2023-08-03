@@ -26,7 +26,7 @@ void Scene_Game::Init(GameLooper* looper) {
 	stages.Init(this);
 
 	// init plane
-	coros.Add(CoPlaneReborn({}, 0s));
+	tasks.AddTask(CoPlaneReborn({}, 0));
 }
 
 /***********************************************************************/
@@ -44,14 +44,14 @@ int Scene_Game::Update() {
 		++frameNumber;
 
 		// generate monsters
-		coros();
+		tasks();
 
 		// move bg
 		space.Update();
 
 		// move player's plane
 		if (plane && plane->Update()) {
-			coros.Add(CoPlaneReborn(plane->pos));	// reborn
+			tasks.AddTask(CoPlaneReborn(plane->pos));	// reborn
 			plane.Reset();
 		}
 
@@ -160,23 +160,23 @@ void Scene_Game::EraseMonster(Sobj_Monster* m) {
 
 /***********************************************************************/
 
-xx::Coro Scene_Game::CoPlaneReborn(xx::XY bornPos, std::chrono::steady_clock::duration const& delay) {
-	CoSleep(delay);
+xx::Task<> Scene_Game::CoPlaneReborn(xx::XY bornPos, double const& delay) {
+	co_await xx::engine.TaskSleep(delay);
 	assert(!plane);
 	plane.Emplace()->Init(this, bornPos, 240);
 }
 
-xx::Coro Scene_Game::CoShowStageTitle(std::string_view const& txt) {
+xx::Task<> Scene_Game::CoShowStageTitle(std::string_view const& txt) {
 	auto&& lb = stageTitle.Emplace();									// create title
 
 	lb->SetColor({ 255, 127, 127, 255 }).SetPosition({ 0, 200 })
 		.SetText(looper->fnt, txt, 128);								// set properties
 
-	CoSleep(1s);														// show & wait 1s
+	co_await xx::engine.TaskSleep(1);									// show & wait 1s
 
 	for (int i = 255; i >= 0; i -= 2) {
 		lb->SetColor({ 255, 127, 127, (uint8_t)i });					// fade out
-		CoYield;
+		co_yield 0;
 	}
 
 	lb.Reset();															// release

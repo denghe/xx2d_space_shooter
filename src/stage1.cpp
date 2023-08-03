@@ -7,59 +7,59 @@ void Stage1::Init(Scene_Game* scene_) {
 }
 
 void Stage1::Enter() {
-	scene->coros.Add(CoEnter());
+	scene->tasks.AddTask(CoEnter());
 }
 
 void Stage1::Leave() {
 }
 
-xx::Coro Stage1::CoEnter() {
+xx::Task<> Stage1::CoEnter() {
 	
-	scene->coros.Add(scene->CoShowStageTitle("stage 1"));				// show stage title
+	scene->tasks.AddTask(scene->CoShowStageTitle("stage 1"));				// show stage title
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-1a"sv], 5, 3));
-	CoSleep(4s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-1a"sv], 5, 3));
+	co_await xx::engine.TaskSleep(4);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-1b"sv], 5, 0));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-1b"sv], 5, 0));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-2a"sv], 5, 1));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-2a"sv], 5, 1));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-2b"sv], 5, 2));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-2b"sv], 5, 2));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-3a"sv], 5, 3));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-3a"sv], 5, 3));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-3b"sv], 5, 4));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-3b"sv], 5, 4));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-4a"sv], 5, 0));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-4a"sv], 5, 0));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-4b"sv], 5, 1));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-4b"sv], 5, 1));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-5a"sv], 5, 2));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-5a"sv], 5, 2));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-5b"sv], 5, 0));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-5b"sv], 5, 0));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-6a"sv], 5, 1));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-6a"sv], 5, 1));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsterTeam(scene->movePaths["s1-6b"sv], 5, 2));
-	CoSleep(3s);
+	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-6b"sv], 5, 2));
+	co_await xx::engine.TaskSleep(3);
 
-	scene->coros.Add(CoCreateMonsters(120 * 5, 10));					// make some random monster2
-	CoSleep(10s);
+	scene->tasks.AddTask(CoCreateMonsters(120 * 5, 10));					// make some random monster2
+	co_await xx::engine.TaskSleep(10);
 
 	scene->stages.GoNext();
 }
 
-xx::Coro Stage1::CoCreateMonsters(int n1, int n2) {
+xx::Task<> Stage1::CoCreateMonsters(int n1, int n2) {
 	// i: num frames
 	for (int i = 0; i < n1; i++) {
 
@@ -78,11 +78,11 @@ xx::Coro Stage1::CoCreateMonsters(int n1, int n2) {
 			scene->AddMonster(m);
 		}
 
-		CoYield;	// step frame
+		co_yield 0;	// step frame
 	}
 }
 
-xx::Coro Stage1::CoCreateMonsterTeam(xx::Shared<xx::MovePathCache> mpc, int n, int stuffTypeId) {
+xx::Task<> Stage1::CoCreateMonsterTeam(xx::Shared<xx::MovePathCache> mpc, int n, int stuffTypeId) {
 	// team death counter
 	auto dt = xx::Make<Listener<Sobj_Monster>>([this, n, stuffTypeId](Sobj_Monster* m) mutable {
 		if (--n == 0) {
@@ -95,6 +95,6 @@ xx::Coro Stage1::CoCreateMonsterTeam(xx::Shared<xx::MovePathCache> mpc, int n, i
 		m->Init1(scene, 4.f, { 255,255,255,255 }, dt);
 		m->Init2({}, mpc);
 		scene->AddMonster(m);
-		CoSleep(600ms);
+		co_await xx::engine.TaskSleep(0.6);
 	}
 }

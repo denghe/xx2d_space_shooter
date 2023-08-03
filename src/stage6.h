@@ -7,9 +7,9 @@ struct Stage6 : Stage {
 	void Enter() override;
 	void Leave() override;
 
-	xx::Coro CoEnter();
-	xx::Coro CoCreateMonsterTeam(int n, int64_t bonus);
-	xx::Coro CoCreateMonsters(int n1, int n2);
+	xx::Task<> CoEnter();
+	xx::Task<> CoCreateMonsterTeam(int n, int64_t bonus);
+	xx::Task<> CoCreateMonsters(int n1, int n2);
 
 	// todo: env
 };
