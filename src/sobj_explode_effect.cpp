@@ -28,9 +28,9 @@ void Sobj_ExplodeEffect::Init(Scene_Game* scene_, xx::XY const& pos_) {
 	pos = pos_;
 	ring.SetPosition(pos).SetScale(0.01).SetTexture(scene_->frames.texRing).SetColorA((uint8_t)200);
 	particle.Init(scene_->frames.particleCfg, 20);
-	actions.AddTask(Action_ScaleTo(3.f, 3.f / 30));
-	actions.AddTask(Action_FadeOut(255 / 30));
-	actions.AddTask(Action_Explode());
+	actions.Add(Action_ScaleTo(3.f, 3.f / 30));
+	actions.Add(Action_FadeOut(255 / 30));
+	actions.Add(Action_Explode());
 }
 
 bool Sobj_ExplodeEffect::Update() {

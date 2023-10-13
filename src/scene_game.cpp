@@ -26,7 +26,7 @@ void Scene_Game::Init(GameLooper* looper) {
 	stages.Init(this);
 
 	// init plane
-	tasks.AddTask(CoPlaneReborn({}, 0));
+	tasks.Add(CoPlaneReborn({}, 0));
 }
 
 /***********************************************************************/
@@ -51,7 +51,7 @@ int Scene_Game::Update() {
 
 		// move player's plane
 		if (plane && plane->Update()) {
-			tasks.AddTask(CoPlaneReborn(plane->pos));	// reborn
+			tasks.Add(CoPlaneReborn(plane->pos));	// reborn
 			plane.Reset();
 		}
 

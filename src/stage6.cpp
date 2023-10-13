@@ -7,7 +7,7 @@ void Stage6::Init(Scene_Game* scene_) {
 }
 
 void Stage6::Enter() {
-	scene->tasks.AddTask(CoEnter());
+	scene->tasks.Add(CoEnter());
 }
 
 void Stage6::Leave() {
@@ -15,14 +15,14 @@ void Stage6::Leave() {
 
 xx::Task<> Stage6::CoEnter() {
 	
-	scene->tasks.AddTask(scene->CoShowStageTitle("stage 6"));				// show stage title
+	scene->tasks.Add(scene->CoShowStageTitle("stage 6"));				// show stage title
 
 	for (size_t i = 0; i < 10; i++) {
-		scene->tasks.AddTask(CoCreateMonsterTeam(1, 2000));					// make some monster1 team
+		scene->tasks.Add(CoCreateMonsterTeam(1, 2000));					// make some monster1 team
 		co_await xx::engine.TaskSleep(0.5);
 	}
 	
-	scene->tasks.AddTask(CoCreateMonsters(120 * 5, 10));					// make some random monster2
+	scene->tasks.Add(CoCreateMonsters(120 * 5, 10));					// make some random monster2
 	
 	co_await xx::engine.TaskSleep(10);										// wait some time
 	

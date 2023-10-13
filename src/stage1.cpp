@@ -7,7 +7,7 @@ void Stage1::Init(Scene_Game* scene_) {
 }
 
 void Stage1::Enter() {
-	scene->tasks.AddTask(CoEnter());
+	scene->tasks.Add(CoEnter());
 }
 
 void Stage1::Leave() {
@@ -15,45 +15,45 @@ void Stage1::Leave() {
 
 xx::Task<> Stage1::CoEnter() {
 	
-	scene->tasks.AddTask(scene->CoShowStageTitle("stage 1"));				// show stage title
+	scene->tasks.Add(scene->CoShowStageTitle("stage 1"));				// show stage title
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-1a"sv], 5, 3));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-1a"sv], 5, 3));
 	co_await xx::engine.TaskSleep(4);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-1b"sv], 5, 0));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-1b"sv], 5, 0));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-2a"sv], 5, 1));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-2a"sv], 5, 1));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-2b"sv], 5, 2));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-2b"sv], 5, 2));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-3a"sv], 5, 3));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-3a"sv], 5, 3));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-3b"sv], 5, 4));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-3b"sv], 5, 4));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-4a"sv], 5, 0));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-4a"sv], 5, 0));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-4b"sv], 5, 1));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-4b"sv], 5, 1));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-5a"sv], 5, 2));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-5a"sv], 5, 2));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-5b"sv], 5, 0));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-5b"sv], 5, 0));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-6a"sv], 5, 1));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-6a"sv], 5, 1));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsterTeam(scene->movePaths["s1-6b"sv], 5, 2));
+	scene->tasks.Add(CoCreateMonsterTeam(scene->movePaths["s1-6b"sv], 5, 2));
 	co_await xx::engine.TaskSleep(3);
 
-	scene->tasks.AddTask(CoCreateMonsters(120 * 5, 10));					// make some random monster2
+	scene->tasks.Add(CoCreateMonsters(120 * 5, 10));					// make some random monster2
 	co_await xx::engine.TaskSleep(10);
 
 	scene->stages.GoNext();
